@@ -1,4 +1,5 @@
 import NIOHPACK
+import GRPC
 
 public protocol Dependency {
     /// It is possible to monitor all requests by injecting it when creating `Session`.
@@ -16,6 +17,16 @@ public protocol Dependency {
     ///   - file: The file where the error was raised.
     ///   - line: The line within the file where the error was raised.
     func didCatchError(_ error: Error, file: StaticString, line: Int)
+
+    /// Called when connectivity state changed.
+    ///
+    /// - Parameters:
+    ///   - oldState: old connectivity state.
+    ///   - newState: new connectivity state.
+    func didConnectivityStateDidChange(oldState: ConnectivityState, newState: ConnectivityState)
+
+    /// Called when connection started quiescing.
+    func didConnectionStartedQuiescing()
 }
 
 public extension Dependency {
@@ -24,6 +35,10 @@ public extension Dependency {
     }
 
     func didCatchError(_ error: Error, file: StaticString, line: Int) {}
+
+    func didConnectivityStateDidChange(oldState: ConnectivityState, newState: ConnectivityState) {}
+
+    func didConnectionStartedQuiescing() {}
 }
 
 public class StreamingDependency: Dependency {

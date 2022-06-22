@@ -72,6 +72,15 @@ open class Session: SessionProtocol {
             .withErrorDelegate(SessionErrorDelegate { error, file, line in
                 dependency.didCatchError(error, file: file, line: line)
             })
+            .withConnectivityStateDelegate(
+                ConnectivityStateDelegate(
+                    stateChangedHandler: { oldState, newState in
+                        dependency.didConnectivityStateDidChange(oldState: oldState, newState: newState)
+                    },
+                    quiescingHandler: {
+                        dependency.didConnectionStartedQuiescing()
+                    }
+            ))
             .connect(host: host, port: port)
 
         self.dependency = dependency
