@@ -81,6 +81,7 @@ open class Session: SessionProtocol {
                         dependency.didConnectionStartedQuiescing()
                     }
             ))
+            .withCallStartBehavior(.fastFailure)
             .connect(host: host, port: port)
 
         self.dependency = dependency
